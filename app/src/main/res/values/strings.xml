@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Espence Tracker App</string>
+    <string name="no_transactions">No transactions icon</string>
+    <string name="no_transactions_found">No transactions found</string>
+    <string-array name="categories_array">
+        <item>Food</item>
+        <item>Transport</item>
+        <item>Entertainment</item>
+        <item>Utilities</item>
+        <item>Others</item>
+    </string-array>
+</resources>
