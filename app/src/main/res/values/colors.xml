@@ -9,5 +9,32 @@
     <color name="white">#FFFFFF</color>
     <color name="green_500">#4CAF50</color>
     <color name="red_500">#F44336</color>
+    <!-- Primary brand color -->
+    <color name="primaryColor">#FF5722</color>  <!-- Orange shade (you can change this) -->
 
+    <color name="gray_light">#EEEEEE</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+
+    <!-- Primary Colors -->
+    <color name="primaryLight">#FF8A65</color>
+    <color name="primaryDark">#E64A19</color>
+
+    <!-- Secondary Colors -->
+    <color name="secondaryColor">#607D8B</color>  <!-- Blue Gray -->
+    <color name="secondaryLight">#B0BEC5</color>
+    <color name="secondaryDark">#455A64</color>
+
+    <!-- Grayscale -->
+      <!-- Very light gray -->
+    <color name="gray_medium">#BDBDBD</color>    <!-- Medium gray -->
+    <color name="gray_dark">#757575</color>      <!-- Dark gray (for text) -->
+
+
+    <!-- Social Brand Colors -->
+    <color name="facebook_blue">#1877F2</color>
+    <color name="google_red">#DB4437</color>
+
+    <!-- Backgrounds -->
+    <color name="background_light">#FAFAFA</color>
 </resources>
