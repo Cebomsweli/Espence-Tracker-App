@@ -81,21 +81,21 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-// Hide default title
+        // Hide default title
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-// Set custom title to user email
+      // Set custom title to user email
         if (user != null) {
             toolbar.setTitle("Espence Tracker");  // This will now be shown on the left
         }
-// Setup the drawer layout and navigation view
+       // Setup the drawer layout and navigation view
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
 
-// Inflate logout icon in the menu
+      // Inflate logout icon in the menu
         toolbar.inflateMenu(R.menu.top_app_bar_menu);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_logout) {
