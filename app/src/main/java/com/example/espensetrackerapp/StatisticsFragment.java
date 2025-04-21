@@ -274,26 +274,101 @@ public class StatisticsFragment extends Fragment {
 
 
     private void setupCategoryChart() {
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        Map<String, Float> categoryValues = new HashMap<>();
-        categoryValues.put("Food", 500f);
-        categoryValues.put("Transport", 300f);
-        categoryValues.put("Rent", 1200f);
-        categoryValues.put("Entertainment", 450f);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        int i = 0;
-        for (Map.Entry<String, Float> entry : categoryValues.entrySet()) {
-            entries.add(new BarEntry(i++, entry.getValue()));
+        if (user == null) {
+            Log.e("CategoryChart", "User not logged in");
+            return;
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Categories");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        BarData data = new BarData(dataSet);
+        String uid = user.getUid();
 
-        categoryChart.setData(data);
-        categoryChart.getDescription().setEnabled(false);
-        categoryChart.getLegend().setEnabled(false);
-        categoryChart.getXAxis().setDrawLabels(false);
-        categoryChart.invalidate();
+        db.collection("Transactions")
+                .whereEqualTo("userId", uid)
+                .whereEqualTo("type", "Expense")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Map<String, Float> categoryTotals = new HashMap<>();
+
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        try {
+                            float amount = 0;
+                            if (doc.get("Amount") instanceof Number) {
+                                amount = ((Number) doc.get("Amount")).floatValue();
+                            } else if (doc.get("Amount") != null) {
+                                amount = Float.parseFloat(doc.getString("Amount"));
+                            }
+
+                            String category = doc.getString("category");
+                            if (category != null) {
+                                categoryTotals.put(category, categoryTotals.getOrDefault(category, 0f) + amount);
+                            }
+                        } catch (Exception e) {
+                            Log.e("CategoryChart", "Error parsing document: " + doc.getId(), e);
+                        }
+                    }
+
+                    if (categoryTotals.isEmpty()) {
+                        categoryChart.setNoDataText("No category expense data");
+                        categoryChart.invalidate();
+                        return;
+                    }
+
+                    ArrayList<BarEntry> entries = new ArrayList<>();
+                    ArrayList<String> labels = new ArrayList<>();
+                    int i = 0;
+
+                    for (Map.Entry<String, Float> entry : categoryTotals.entrySet()) {
+                        entries.add(new BarEntry(i, entry.getValue()));
+                        labels.add(entry.getKey());
+                        i++;
+                    }
+
+                    BarDataSet dataSet = new BarDataSet(entries, "Expenses by Category");
+                    dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                    dataSet.setValueTextSize(10f);
+                    dataSet.setValueTextColor(Color.BLACK);
+                    dataSet.setValueFormatter(new ValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value) {
+                            return String.format(Locale.getDefault(), "R%.2f", value);
+                        }
+                    });
+
+                    BarData data = new BarData(dataSet);
+                    data.setBarWidth(0.8f);
+
+                    XAxis xAxis = categoryChart.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+                    xAxis.setGranularity(1f);
+                    xAxis.setDrawGridLines(false);
+
+                    YAxis leftAxis = categoryChart.getAxisLeft();
+                    leftAxis.setAxisMinimum(0f);
+                    leftAxis.setValueFormatter(new ValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value) {
+                            return String.format(Locale.getDefault(), "R%.0f", value);
+                        }
+                    });
+
+                    categoryChart.getAxisRight().setEnabled(false);
+                    categoryChart.getDescription().setEnabled(false);
+                    categoryChart.getLegend().setEnabled(false);
+                    categoryChart.setFitBars(true);
+                    categoryChart.setData(data);
+                    categoryChart.animateY(1000);
+                    categoryChart.invalidate();
+
+                    Log.d("CategoryChart", "Category chart updated");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("CategoryChart", "Error loading category data", e);
+                    categoryChart.setNoDataText("Error loading category data");
+                    categoryChart.invalidate();
+                });
     }
+
 }
