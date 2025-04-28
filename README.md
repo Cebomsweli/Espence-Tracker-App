@@ -11,7 +11,8 @@ An Android application for tracking your daily income and expenses.
 - Save transactions to Firebase Firestore
 
 ## Screenshots
-*(Add screenshots here if you have any)*
+![WhatsApp Image 2025-04-22 at 20 32 44_5b1fef8d](https://github.com/user-attachments/assets/0f55792c-fcec-4c76-93b0-73903ad037c8)
+
 
 ## Technologies Used
 
