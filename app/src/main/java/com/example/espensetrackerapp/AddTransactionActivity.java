@@ -32,7 +32,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String selectedType = "Income";
 
-    private final String[] categories = {"Food", "Transport", "Bills", "Entertainment", "Salary", "Other"};
+    private final String[] categories = { "Gifts", "Pets", "Home Maintenance"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 selectedType = (checkedId == R.id.radio_income) ? "Income" : "Expense";
             }
         });
+        // Load Categories from strings.xml
 
         // Setup Category Dropdown
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories);

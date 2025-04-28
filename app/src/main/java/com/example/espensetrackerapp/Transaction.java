@@ -46,5 +46,7 @@ public class Transaction {
     public void setDate(String date) {
         this.date = date;
     }
+
+
 }
 
